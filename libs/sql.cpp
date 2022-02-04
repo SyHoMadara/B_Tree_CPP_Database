@@ -38,22 +38,29 @@ void sql::command_handler(string command) {
     }
 }
 
-void sql::remove(vector<string> vector) {
+void sql::remove(const vector<string>& vector) {
 
 }
 
-void sql::create(vector<string> vector) {
+void sql::create(const vector<string>& vector) {
 
 }
 
-void sql::update(vector<string> vector) {
+void sql::update(const vector<string>& vector) {
 
 }
 
-void sql::insert(vector<string> vector) {
+void sql::insert(const vector<string>& vector) {
 
 }
 
-void sql::select(vector<string> vector) {
+void sql::select(const vector<string>& vector) {
 
+}
+
+sql::sql(){}
+
+sql& sql::get_sql() {
+    if(sql::SQL == nullptr) sql::SQL = new sql();
+    return *sql::SQL;
 }
