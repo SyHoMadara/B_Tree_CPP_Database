@@ -4,12 +4,14 @@
 
 #include <string>
 #include "vector"
+#include "data_base.h"
 #include <sstream>
 
 using namespace std;
 
 class sql {
 public:
+    const vector<data_base> dbs;
     const vector<string> commands = {"CREATE", "DELETE", "UPDATE", "INSERT", "SElECT"};
     static vector<string> tokenize(string &str);
     pair<int, vector<string>>* find_command(string &command);
