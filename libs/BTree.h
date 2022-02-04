@@ -8,7 +8,7 @@ template <typename T>
 class BTNode {
    public:
     int m;
-    int minc;
+    int minc{};
     T *a;
     BTNode<T> **b;
     BTNode<T> *parent;
@@ -29,7 +29,7 @@ class BTree {
     int flag, flag1;
 
    public:
-    BTree(int M);
+    explicit BTree(int M);
     T max(T a, T b);
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
 

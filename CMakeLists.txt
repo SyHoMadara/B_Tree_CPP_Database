@@ -8,4 +8,4 @@ include_directories(libs)
 add_executable(B_Tree_CPP_Database
         libs/BTree.cpp
         libs/BTree.h
-        main.cpp)
+        main.cpp libs/command_handler.cpp)
