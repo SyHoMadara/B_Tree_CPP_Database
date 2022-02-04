@@ -8,7 +8,7 @@ template <typename T>
 class BTNode {
    public:
     int m;
-    int minc;
+    int min;
     T *a;
     BTNode<T> **b;
     BTNode<T> *parent;
@@ -25,7 +25,7 @@ class BTree {
    private:
     BTNode<T> *root;
     int m;
-    int minc;
+    int min;
     int flag, flag1;
 
    public:

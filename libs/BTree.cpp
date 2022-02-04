@@ -17,6 +17,7 @@ template <typename T>
 bool BTNode<T>::IsFull() {
     if (Num == m - 2) return true;
     return false;
+    //k;kkh
 }
 
 template <typename T>
