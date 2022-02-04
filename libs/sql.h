@@ -9,10 +9,16 @@
 using namespace std;
 
 class sql {
+public:
     const vector<string> commands = {"CREATE", "DELETE", "UPDATE", "INSERT", "SElECT"};
-    vector<string> tokenize(string &str);
-    pair<int, vector<string>>* findCommand(string command);
-
+    static vector<string> tokenize(string &str);
+    pair<int, vector<string>>* find_command(string &command);
+    void command_handler(string command);
+    void remove(vector<string> vector);
+    void create(vector<string> vector);
+    void update(vector<string> vector);
+    void insert(vector<string> vector);
+    void select(vector<string> vector);
 };
 
 
