@@ -7,6 +7,7 @@ public:
     Node* nextField;
     BTNode* self;
 }
+
 template <typename T>
 class BTree;
 template <typename T>
@@ -14,7 +15,7 @@ class BTNode {
    public:
     int m;
     int min;
-    T *a;
+    Node<T> *a;
     BTNode<T> **b;
     BTNode<T> *parent;
     int Num;
