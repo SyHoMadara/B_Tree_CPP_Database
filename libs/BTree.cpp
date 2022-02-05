@@ -21,18 +21,18 @@ bool BTNode<T>::IsFull() {
 
 template <typename T>
 BTNode<T> *BTNode<T>::search(int k) {
-    int i = 0;
-    while (i <= Num && a[i] < k) i++;
-    if (a[i] == k) return this;
-    if (l) return NULL;
-    return b[i]->search(k);
+    int i = 0 ;
+    while(i <= Num &&  a[i]->data < k ) i++ ;
+    if (a[i]->data == k) return this ;
+    if( l) return NULL ;
+    return b[i]->search(k) ;
 }
 
 template <typename T>
 void BTNode<T>::print() {
     int i ;
     for (i = 0; i < Num ; i++){
-        cout <<" "  << a[i];
+        cout <<" "  << a[i]->data;
         if (l == false) b[i]->print();
 
 
@@ -61,7 +61,7 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
         if (h->l) return h ;
         int i ;
         for( i = 0 ; i <h->Num ; i++){
-            if (k < h->a[i]){
+            if (k < h->a[i]->data){
                 return s(h->b[i] , k , i , h) ;
             }
         }
@@ -78,15 +78,15 @@ template <typename T>
 void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
     BTNode<T> * q = new BTNode<T>( m , h->l);
     q->Num = min-1 ;
-    for( int i = 0 ; i < min - 1 ; i++) q->a[i] = h->a[i+min];
+    for( int i = 0 ; i < min - 1 ; i++) q->a[i]->data = h->a[i+min]->data;
     if (h->l == false){
         for (int i = 0; i < min ; i++) q->b[i] = h->b[i+min];
     }
     h->Num = min - 1 ;
     for (int i = t->Num; i >= x+1; i--) t->b[i+1] = t->b[i] ;
     t->b[x+1] = q;
-    for (int i = t->Num; i >= x; i--) t->a[i+1] = t->a[i] ;
-    t->a[x] = h->a[min-1] ;
+    for (int i = t->Num; i >= x; i--) t->a[i+1]->data = t->a[i]->data ;
+    t->a[x]->data = h->a[min-1]->data ;
     t->Num ++ ;
 }
 template <typename T>
@@ -94,17 +94,17 @@ void BTree<T>:: insert1(BTNode<T> * h , T k){
     int i = h->Num - 1 ;
     if(h->l){
         while ( 0 <=i  && h->a[i] > k){
-            h->a[i+1] = h->a[i];
+            h->a[i+1]->data = h->a[i]->data;
             i--;
         }
-        h->a[i+1] = k;
+        h->a[i+1]->data = k;
         h->Num ++;
     }
     else{
         while (i >= 0 && h->a[i] > k) i--;
         if (h->b[i+1]->Num == m-1){
             f(h->b[i+1],i+1,h);
-            if (h->a[i+1] < k)i++;
+            if (h->a[i+1]->data < k)i++;
         }
         insert1(h->b[i+1],k);
     }
@@ -115,7 +115,7 @@ template <typename T>
         BTNode<T> *tnode = new BTNode<T>( m , true);
         root = tnode ;
         root->parent = NULL ;
-        root->a[0] = k ;
+        root->a[0]->data = k ;
         root->Num ++ ;
         return  ;
     }
