@@ -6,7 +6,7 @@ template <typename T>
 BTNode<T>::BTNode(int M, bool f) {
     m = M;
     min = (m + 1) / 2;
-    a = new int[m - 1];
+    a = new Node<T>*[m - 1];
     b = new BTNode *[m];
     Num = 0;
     l = f;
@@ -125,7 +125,7 @@ template <typename T>
             t->b[0] = root;
             f( root,0,t);
             int i = 0;
-            if (t->a[0] < k) i++;
+            if (t->a[0]->data < k) i++;
             insert1( t->b[i] ,k);
             root = t;
         }
