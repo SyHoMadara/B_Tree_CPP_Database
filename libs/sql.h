@@ -28,15 +28,15 @@ public:
 
     static vector<string> extract_parameters(const string &par);
 
-    void remove(const string &command);
+    static void remove(const string &command);
 
     static void create(const string &command);
 
-    void update(const string &command);
+    static void update(const string &command);
 
-    void insert(const string &command);
+    static void insert(const string &command);
 
-    void select(const string &command);
+    static void select(const string &command);
 
 
 
@@ -50,15 +50,19 @@ public:
 
     static long long int contime2long(string s);
 
-    static long long int constr2long(string s, const int base_convert, const char base_char);
+    static long long int constr2long(string s, int base_convert, char base_char);
 
-    static string conlong2str(long long int a, const int base_convert, const char base_char);
+    static string conlong2str(long long int a, int base_convert, char base_char);
 
     static string conlong2str(long long int a);
 
     static long long int constr2long(string s);
 
     static NODE_HASH_TYPE hash_code(const string& s1, const string& s2);
+
+    static vector<string> split(const string &par, const char &with);
+
+    static void select_all(const string& command);
 };
 
 

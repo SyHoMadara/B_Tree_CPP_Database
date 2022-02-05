@@ -5,7 +5,7 @@
 
 
 sql::sql() {
-    commands = {"CREATE TABLE", "DELETE FROM", "UPDATE", "INSERT INTO", "SElECT"};
+    commands = {"CREATE TABLE", "DELETE FROM", "UPDATE", "INSERT INTO", "SElECT", "SELECT \\*"};
     for (auto &command : commands) command += "(.+)";
 }
 
@@ -43,10 +43,19 @@ void sql::command_handler(string command) {
         case 4:
             sql::select(p->second);
             break;
+        case 5:
+            sql::select_all(p->second);
+            break;
     }
 }
 
 void sql::remove(const string &command) {
+    // DELETE FROM {table name} WHERE {condition}
+    regex r(R"(DELETE FROM (\w+) WHERE (.+))");
+    smatch m;
+    regex_search(command, m, r);
+    string table_name = m[1].str();
+    // TODO not complete condition most extract
 
 }
 
@@ -57,22 +66,20 @@ void sql::create(const string &command) {
     regex_search(command, m, first_regex);
     string table_name = m[1].str();
     auto parameters = sql::extract_parameters(m[2].str());
-
-//    sregex_iterator it2(ss.begin(), ss.end(), first_regex);
-//    result.push_back(hash_code(it2->str(), (it2++)->str()));
     vector<NODE_HASH_TYPE> p;
     for(string ss: parameters){
-        cout << ss << '\n';
         sregex_iterator it2(ss.begin(), ss.end(), r);
         p.push_back(hash_code(it2->str(), (it2++)->str()));
-    }
-    for(auto itit: p){
-        cout << itit.first << " " << itit.second << endl;
     }
 
 }
 
 void sql::update(const string &command) {
+    // UPDATE employee SET ("Hamid",2022/8/7,50000) WHERE name=="Hamid"
+    regex r(R"(UPDATE (\w+) SET \((.+)\) WHERE (.+))");
+    smatch m;
+    regex_search(command, m, r);
+    string table_name = m[1].str();
 
 }
 
@@ -82,14 +89,32 @@ void sql::insert(const string &command) {
     smatch m;
     regex_search(command, m, r);
     string table_name = m[1].str();
-    auto parameters = sql::extract_parameters(m[2].str());
+    auto fields = sql::extract_parameters(m[2].str());
 
 }
 
 void sql::select(const string &command) {
+    // SELECT (column1,column2,...) FROM {table name} WHERE condition
+    regex r(R"(SELECT (\(.+)\) FROM (\w+) WHERE (.+))");
+    smatch m;
+    regex_search(command, m, r);
+    string table_name = m[2].str();
+    auto columns = sql::extract_parameters(m[1].str());
+    for(auto cc: columns) cout << cc << endl;
+    string condition = m[3];
 
 }
 
+void sql::select_all(const string& command) {
+    // SELECT * FROM {table name} WHERE condition
+    regex r(R"(SELECT \* FROM (\w+) WHERE (.+))");
+    smatch m;
+    regex_search(command, m, r);
+    string table_name = m[1].str();
+    string condition = m[2].str();
+    cout<<table_name<< " " << condition;
+
+}
 
 string sql::conlong2str(long long a, const int base_convert, const char base_char) {
     string s;
@@ -115,7 +140,7 @@ long long sql::constr2long(string s, const int base_convert, const char base_cha
 }
 
 long long sql::constr2long(string s) {
-    return constr2long(s, 'z' - 'a', 'a');
+    return constr2long(std::move(s), 'z' - 'a', 'a');
 }
 
 string sql::conlong2time(long long a) {
@@ -144,19 +169,25 @@ NODE_HASH_TYPE sql::hash_code(const string &s2, const string &s1) {
 vector<string> sql::extract_parameters(const string &par) {
     // remove parenthesis from end and begin.
     string clear_par;
-    regex par_regex(R"([\w/\d ]+)");
     for (char it : par) {
         if (it == '(' || it == ')')continue;
         clear_par += it;
     }
     // extract parameters.
+    return split(clear_par, ',');
+
+}
+
+vector<string> sql::split(const string &par, const char& with){
+    string wit; wit+=with;
+    string reg = "([^"+wit+"]+)" ;
+    regex par_regex(reg);
     vector<string> result;
-    for (sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it != it_end; it++) {
+    for (sregex_iterator it(par.begin(), par.end(), par_regex), it_end; it != it_end; it++) {
         result.push_back(it->str());
     }
     return result;
 }
-
 
 
 
