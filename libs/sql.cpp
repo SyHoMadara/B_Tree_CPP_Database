@@ -1,4 +1,5 @@
 #include <regex>
+#include <utility>
 #include "sql.h"
 
 
@@ -66,32 +67,43 @@ void sql::select(const string &command) {
 
 }
 
-string sql::conlong2str(long long a){
 
+string sql::conlong2str(long long a, const int base_convert, const char base_char) {
+    string s;
+    while (a) {
+        s += (char) (base_char + a % base_convert);
+        a /= base_convert;
+    }
+    return s;
 }
 
-long long sql::constr2long(string s){
-
+long long sql::constr2long(string s, const int base_convert, const char base_char) {
+    long long a = 0;
+    long long i = 1;
+    for (auto it = s.begin(); it != s.end(); it++, i *= base_convert) {
+        a += (*it - base_char) * i;
+    }
+    return a;
 }
 
-string sql::contime2str(long long a){
-
+string sql::conlong2time(long long a) {
+    return conlong2str(a, 'z'-'/', '/');
 }
 
-long long sql::constr2time(string s){
-
+long long sql::contime2long(string s) {
+    return constr2long(std::move(s), 'z'-'/', '/');
 }
 
-NODE_HASH_TYPE sql::hash_code(const string& s1, const string& s2){
+NODE_HASH_TYPE sql::hash_code(const string &s1, const string &s2) {
     NODE_HASH_TYPE result;
-    if(s2=="int"){
+    if (s2 == "int") {
         result.first = stoi(s1);
         result.second = 0;
-    } else if(s2=="string"){
+    } else if (s2 == "string") {
         result.first = constr2long(s1);
         result.second = 1;
-    } else if(s2=="time"){
-        result.first = constr2time(s1);
+    } else if (s2 == "time") {
+        result.first = contime2long(s1);
         result.second = 2;
     }
     return result;
@@ -105,7 +117,7 @@ vector<NODE_HASH_TYPE> sql::extract_parameters(const string &par) {
         clear_par += *it;
     // extract parameters.
     vector<NODE_HASH_TYPE> result;
-    for(sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it!=it_end; it++){
+    for (sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it != it_end; it++) {
         string ss = it->str();
         sregex_iterator it2(ss.begin(), ss.end(), r);
         result.push_back(hash_code(it->str(), (++it)->str()));

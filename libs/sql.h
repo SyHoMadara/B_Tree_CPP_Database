@@ -40,13 +40,21 @@ public:
 
     static NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
 
-    string conlong2str(long long int a);
+    static const int BASE_CONVERT = 26;
+    static const char BASE_CHARE = 'a';
 
-    static long long int constr2long(string s);
 
-    string contime2str(long long int a);
 
-    static long long int constr2time(string s);
+
+    static string conlong2time(long long int a);
+
+    static long long int contime2long(string s);
+
+    static long long int constr2long(string s, const int base_convert, const char base_char);
+
+    static string conlong2str(long long int a, const int base_convert, const char base_char);
+
+    string conlong2str(long long int a, const int base_convert, const char base_char);
 };
 
 
