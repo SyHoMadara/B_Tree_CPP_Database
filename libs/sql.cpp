@@ -54,6 +54,10 @@ void sql::create(const string &command) {
     //CREATE TABLE {table name} (column1 type,column2 type,...)
     regex r(R"(CREATE TABLE (\w+) (\(.+)\))");
     smatch m;
+    regex_search(command, m, r);
+    string table_name = m[1].str();
+    auto parameters = sql::extract_parameters(m[2].str());
+
 
 }
 
@@ -105,7 +109,7 @@ long long sql::contime2long(string s) {
     return constr2long(std::move(s), 'z' - '/', '/');
 }
 
-NODE_HASH_TYPE sql::hash_code( const string& s2, const string& s1) {
+NODE_HASH_TYPE sql::hash_code(const string &s2, const string &s1) {
     NODE_HASH_TYPE result;
     if (s2 == "int") {
         result.first = stoll(s1);
