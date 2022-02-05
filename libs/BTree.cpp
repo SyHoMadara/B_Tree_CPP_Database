@@ -30,10 +30,13 @@ BTNode<T> *BTNode<T>::search(int k) {
 
 template <typename T>
 void BTNode<T>::print() {
-    for (int i = 0; i < num; i++) {
-        if (l == false)
-            b[i]->print();
-        cout << " " << a[i];
+    int i ;
+    for (i = 0; i < Num ; i++){
+        cout <<" "  << a[i];
+        if (l == false) b[i]->print();
+
+
+
     }
     if (l == false)
         b[i]->print();
@@ -72,22 +75,64 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
     }
 }
 template <typename T>
-BTNode<T> *BTree<T>::insert(T k) {
+void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
+    BTNode<T> * q = new BTNode<T>( m , h->l);
+    q->Num = min-1 ;
+    for( int i = 0 ; i < min - 1 ; i++) q->a[i] = h->a[i+min];
+    if (h->l == false){
+        for (int i = 0; i < min ; i++) q->b[i] = h->b[i+min];
+    }
+    h->Num = min - 1 ;
+    for (int i = t->Num; i >= x+1; i--) t->b[i+1] = t->b[i] ;
+    t->b[x+1] = q;
+    for (int i = t->Num; i >= x; i--) t->a[i+1] = t->a[i] ;
+    t->a[x] = h->a[min-1] ;
+    t->Num ++ ;
+}
+template <typename T>
+void BTree<T>:: insert1(BTNode<T> * h , T k){
+    int i = h->Num - 1 ;
+    if(h->l){
+        while ( 0 <=i  && h->a[i] > k){
+            h->a[i+1] = h->a[i];
+            i--;
+        }
+        h->a[i+1] = k;
+        h->Num ++;
+    }
+    else{
+        while (i >= 0 && h->a[i] > k) i--;
+        if (h->b[i+1]->Num == m-1){
+            f(h->b[i+1],i+1,h);
+            if (h->a[i+1] < k)i++;
+        }
+        insert1(h->b[i+1],k);
+    }
+}
+template <typename T>
+ void BTree<T>::insert(T k) {
     if( root == NULL ){
         BTNode<T> *tnode = new BTNode<T>( m , true);
         root = tnode ;
         root->parent = NULL ;
         root->a[0] = k ;
         root->Num ++ ;
-        return root ;
+        return  ;
     }
     else{
-        /*if( root->Num == m-1){
-            BTNode<T> *tnode = new BTNode<T>( m , false);
-            tnode->b[0] = root ;
-        }*/
-        BTNode<T> * h = s(root, k, 0 , NULL);
-        while(h != NULL ){
+        if( root->Num == m-1){
+            BTNode<T> *t = new BTNode<T>(m, false);
+            t->b[0] = root;
+            f( root,0,t);
+            int i = 0;
+            if (t->a[0] < k) i++;
+            insert1( t->b[i] ,k);
+            root = t;
+        }
+        else{
+            insert1(root , k) ;
+        }
+        /*BTNode<T> * h = s(root, k, 0 , NULL);
 
             if(h->Num == 0 ){
                 h->a[0] = k ;
@@ -105,6 +150,23 @@ BTNode<T> *BTree<T>::insert(T k) {
                 return root ;
 
             }
+            else{
+                whihe( h->Num == m-1){
+                    T*
+                    if(h->parent != NULL){
+                    int in ;
+                    for ( int i = 0 ; i <h->parent->Num ; i++){
+                        if(h->parent->b[i] == h){
+                            in = i ;
+                            break;
+                        }
+                    }
+                    }
+
+                }
+
+            }
+        /*while(h != NULL ){
             if( h->Num == m-1 && h->parent != NULL && h->parent->Num < m){
                 BTNode<T>* q = NULL;
                 int in ;
@@ -141,12 +203,12 @@ BTNode<T> *BTree<T>::insert(T k) {
                             BTNode<T> *s = new BTNode<T>( m , true) ;
                             int p1 , p2 ;
                             for (int i = 0; i < (2*m-2) / 3; i++) h->a[i] = merge[i];
-                            p1 = merge[(2*m-2) / 3];
-                            for (int i = (2*m-2) / 3 + 1 ; i < (4*m)/ 3; i++) q->a[i - (2*m-2) / 3 - 1 ] = merge[i];
-                            p2 = merge[(4*m)/ 3];
-                            for (int i = (4*m) / 3 + 1 ; i < (2*m); i++) s->a[i - (4*m) / 3 - 1 ] = merge[i];
-                            if( in==0 || in==1){
-                                h->parent->a[0] = p1;
+                               p1 = merge[(2*m-2) / 3];
+                               for (int i = (2*m-2) / 3 + 1 ; i < (4*m)/ 3; i++) q->a[i - (2*m-2) / 3 - 1 ] = merge[i];
+                               p2 = merge[(4*m)/ 3];
+                               for (int i = (4*m) / 3 + 1 ; i < (2*m); i++) s->a[i - (4*m) / 3 - 1 ] = merge[i];
+                               if( in==0 || in==1){
+                                   h->parent->a[0] = p1;
                                 h->parent->a[1] = p2;
                                 h->parent->b[0] = h;
                                 h->parent->b[1] = q;
@@ -155,7 +217,7 @@ BTNode<T> *BTree<T>::insert(T k) {
                             }
                             else{
                                 h->parent->a[in - 1] = p1;
-                                h->parent->a[in] = p2;
+                                   h->parent->a[in] = p2;
                                 h->parent->b[in-1] = h;
                                 h->parent->b[in] = q;
                                 h->parent->b[in + 1] = s;
@@ -168,8 +230,8 @@ BTNode<T> *BTree<T>::insert(T k) {
                     }
                 }
             }
-            h = h->parent ;
-        }
+        h = h->parent ;
+        }*/
     }
 }
 
