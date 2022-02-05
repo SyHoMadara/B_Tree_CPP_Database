@@ -54,8 +54,6 @@ public:
 
     static string conlong2str(long long int a, const int base_convert, const char base_char);
 
-    string conlong2str(long long int a, const int base_convert, const char base_char);
-
     static string conlong2str(long long int a);
 
     static long long int constr2long(string s);
