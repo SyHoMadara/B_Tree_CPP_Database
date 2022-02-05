@@ -4,9 +4,9 @@ using namespace std;
 template< typename T >class Node{
 public:
     T data;
-    Node* nextField;
-    BTNode* self;
-}
+    Node<T>* nextField;
+    BTNode<T>* self;
+};
 
 template <typename T>
 class BTree;
