@@ -52,12 +52,23 @@ void sql::remove(const string &command) {
 
 void sql::create(const string &command) {
     //CREATE TABLE {table name} (column1 type,column2 type,...)
-    regex r(R"(CREATE TABLE (\w+) (\(.+)\))");
+    regex first_regex(R"(CREATE TABLE (\w+) (\(.+)\))"), r(R"([\w\d/]+)");
     smatch m;
-    regex_search(command, m, r);
+    regex_search(command, m, first_regex);
     string table_name = m[1].str();
     auto parameters = sql::extract_parameters(m[2].str());
 
+//    sregex_iterator it2(ss.begin(), ss.end(), first_regex);
+//    result.push_back(hash_code(it2->str(), (it2++)->str()));
+    vector<NODE_HASH_TYPE> p;
+    for(string ss: parameters){
+        cout << ss << '\n';
+        sregex_iterator it2(ss.begin(), ss.end(), r);
+        p.push_back(hash_code(it2->str(), (it2++)->str()));
+    }
+    for(auto itit: p){
+        cout << itit.first << " " << itit.second << endl;
+    }
 
 }
 
@@ -66,6 +77,12 @@ void sql::update(const string &command) {
 }
 
 void sql::insert(const string &command) {
+    // INSERT INTO {table name} VALUES (field1,field2,...)
+    regex r(R"(INSERT INTO (\w+) VALUES (\(.+)\))");
+    smatch m;
+    regex_search(command, m, r);
+    string table_name = m[1].str();
+    auto parameters = sql::extract_parameters(m[2].str());
 
 }
 
@@ -124,20 +141,18 @@ NODE_HASH_TYPE sql::hash_code(const string &s2, const string &s1) {
     return result;
 }
 
-vector<NODE_HASH_TYPE> sql::extract_parameters(const string &par) {
+vector<string> sql::extract_parameters(const string &par) {
     // remove parenthesis from end and begin.
     string clear_par;
-    regex par_regex(R"([\w/\d]+ [\w]+)"), r(R"([\w\d/]+)");
+    regex par_regex(R"([\w/\d ]+)");
     for (char it : par) {
         if (it == '(' || it == ')')continue;
         clear_par += it;
     }
     // extract parameters.
-    vector<NODE_HASH_TYPE> result;
+    vector<string> result;
     for (sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it != it_end; it++) {
-        string ss = it->str();
-        sregex_iterator it2(ss.begin(), ss.end(), r);
-        result.push_back(hash_code(it2->str(), (it2++)->str()));
+        result.push_back(it->str());
     }
     return result;
 }

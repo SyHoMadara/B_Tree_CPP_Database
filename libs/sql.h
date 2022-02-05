@@ -26,7 +26,7 @@ public:
 
     void command_handler(string command);
 
-    static vector<pair<long long int, int>> extract_parameters(const string &par);
+    static vector<string> extract_parameters(const string &par);
 
     void remove(const string &command);
 
