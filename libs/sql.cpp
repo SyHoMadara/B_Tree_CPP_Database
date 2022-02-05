@@ -62,7 +62,7 @@ void sql::select(const string &command) {
 }
 
 
-sql& sql::get_sql() {
-    if(sql::SQL == nullptr) sql::SQL = new sql();
-    return *sql::SQL;
-}
+//sql& sql::get_sql() {
+//    if(sql::SQL == nullptr) sql::SQL = new sql();
+//    return *sql::SQL;
+//}

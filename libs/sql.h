@@ -10,10 +10,10 @@
 using namespace std;
 
 class sql {
-private:
+protected:
     explicit sql();
-    static sql* SQL;
 public:
+//    static sql* SQL;
     static sql& get_sql();
     const vector<data_base> dbs;
     vector<string> commands;
