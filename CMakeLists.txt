@@ -8,4 +8,4 @@ include_directories(libs)
 add_executable(B_Tree_CPP_Database
         libs/BTree.cpp
         libs/BTree.h
-        main.cpp libs/sql.cpp libs/sql.h)
+        main.cpp libs/sql.cpp libs/sql.h libs/data_base.cpp libs/data_base.h)
