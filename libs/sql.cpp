@@ -1,5 +1,6 @@
 #include <regex>
 #include <utility>
+#include "iostream"
 #include "sql.h"
 
 
@@ -51,7 +52,8 @@ void sql::remove(const string &command) {
 
 void sql::create(const string &command) {
     //CREATE TABLE {table name} (column1 type,column2 type,...)
-
+    regex r(R"(CREATE TABLE (\w+) (\(.+)\))");
+    smatch m;
 
 }
 
@@ -77,8 +79,8 @@ string sql::conlong2str(long long a, const int base_convert, const char base_cha
     return s;
 }
 
-string sql::conlong2str(long long a){
-    return conlong2str(a, 'z'-'a', 'a');
+string sql::conlong2str(long long a) {
+    return conlong2str(a, 'z' - 'a', 'a');
 }
 
 
@@ -86,26 +88,27 @@ long long sql::constr2long(string s, const int base_convert, const char base_cha
     long long a = 0;
     long long i = 1;
     for (auto it = s.begin(); it != s.end(); it++, i *= base_convert) {
-        a += (*it - base_char) * i;
+        a += i * (*it - base_char);
     }
     return a;
 }
-long long sql::constr2long(string s){
-    return constr2long(s, 'z'-'a', 'a');
+
+long long sql::constr2long(string s) {
+    return constr2long(s, 'z' - 'a', 'a');
 }
 
 string sql::conlong2time(long long a) {
-    return conlong2str(a, 'z'-'/', '/');
+    return conlong2str(a, 'z' - '/', '/');
 }
 
 long long sql::contime2long(string s) {
-    return constr2long(std::move(s), 'z'-'/', '/');
+    return constr2long(std::move(s), 'z' - '/', '/');
 }
 
-NODE_HASH_TYPE sql::hash_code(const string &s1, const string &s2) {
+NODE_HASH_TYPE sql::hash_code( const string& s2, const string& s1) {
     NODE_HASH_TYPE result;
     if (s2 == "int") {
-        result.first = stoi(s1);
+        result.first = stoll(s1);
         result.second = 0;
     } else if (s2 == "string") {
         result.first = constr2long(s1);
@@ -120,15 +123,17 @@ NODE_HASH_TYPE sql::hash_code(const string &s1, const string &s2) {
 vector<NODE_HASH_TYPE> sql::extract_parameters(const string &par) {
     // remove parenthesis from end and begin.
     string clear_par;
-    regex par_regex(R"([\w\d]+ [\w]+)"), r(R"([\w\d]+)");
-    for (auto it = par.begin() + 1; it != par.end() - 1; it++)
-        clear_par += *it;
+    regex par_regex(R"([\w/\d]+ [\w]+)"), r(R"([\w\d/]+)");
+    for (char it : par) {
+        if (it == '(' || it == ')')continue;
+        clear_par += it;
+    }
     // extract parameters.
     vector<NODE_HASH_TYPE> result;
     for (sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it != it_end; it++) {
         string ss = it->str();
         sregex_iterator it2(ss.begin(), ss.end(), r);
-        result.push_back(hash_code(it->str(), (++it)->str()));
+        result.push_back(hash_code(it2->str(), (it2++)->str()));
     }
     return result;
 }

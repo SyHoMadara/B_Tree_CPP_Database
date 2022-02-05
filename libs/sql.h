@@ -30,7 +30,7 @@ public:
 
     void remove(const string &command);
 
-    void create(const string &command);
+    static void create(const string &command);
 
     void update(const string &command);
 
@@ -38,7 +38,7 @@ public:
 
     void select(const string &command);
 
-    static NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
+
 
     static const int BASE_CONVERT = 26;
     static const char BASE_CHARE = 'a';
@@ -57,6 +57,8 @@ public:
     static string conlong2str(long long int a);
 
     static long long int constr2long(string s);
+
+    static NODE_HASH_TYPE hash_code(const string& s1, const string& s2);
 };
 
 
