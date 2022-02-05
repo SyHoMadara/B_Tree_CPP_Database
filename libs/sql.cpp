@@ -98,10 +98,12 @@ NODE_HASH_TYPE sql::hash_code(const string& s1, const string& s2){
 }
 
 vector<NODE_HASH_TYPE> sql::extract_parameters(const string &par) {
+    // remove parenthesis from end and begin.
     string clear_par;
     regex par_regex(R"([\w\d]+ [\w]+)"), r(R"([\w\d]+)");
     for (auto it = par.begin() + 1; it != par.end() - 1; it++)
         clear_par += *it;
+    // extract parameters.
     vector<NODE_HASH_TYPE> result;
     for(sregex_iterator it(clear_par.begin(), clear_par.end(), par_regex), it_end; it!=it_end; it++){
         string ss = it->str();
