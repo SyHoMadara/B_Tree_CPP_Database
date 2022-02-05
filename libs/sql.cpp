@@ -77,6 +77,11 @@ string sql::conlong2str(long long a, const int base_convert, const char base_cha
     return s;
 }
 
+string sql::conlong2str(long long a){
+    return conlong2str(a, 'z'-'a', 'a');
+}
+
+
 long long sql::constr2long(string s, const int base_convert, const char base_char) {
     long long a = 0;
     long long i = 1;
@@ -84,6 +89,9 @@ long long sql::constr2long(string s, const int base_convert, const char base_cha
         a += (*it - base_char) * i;
     }
     return a;
+}
+long long sql::constr2long(string s){
+    return constr2long(s, 'z'-'a', 'a');
 }
 
 string sql::conlong2time(long long a) {
