@@ -1,5 +1,9 @@
 #include "sql.h"
 
+sql::sql(){
+    commands = {"CREATE", "DELETE", "UPDATE", "INSERT", "SElECT"};
+}
+
 vector<string> sql::tokenize(string &str) {
     vector<string> strs;
     stringstream ss(str);
@@ -8,11 +12,10 @@ vector<string> sql::tokenize(string &str) {
     return strs;
 }
 
-pair<int, vector<string>> *sql::find_command(string &command) {
-    vector<string> command_split = tokenize(command);
+pair<int, string> *sql::find_command(string &command) {
     for (int i = 0; i < commands.size(); i++)
-        if (command_split[0] == commands[i])
-            return new pair<int, vector<string>>(i, command_split);
+        if (command == commands[i])
+            return new pair<int, string>(i, command);
     return nullptr;
 }
 
@@ -38,27 +41,26 @@ void sql::command_handler(string command) {
     }
 }
 
-void sql::remove(const vector<string>& vector) {
+void sql::remove(const string &command) {
 
 }
 
-void sql::create(const vector<string>& vector) {
+void sql::create(const string &command) {
 
 }
 
-void sql::update(const vector<string>& vector) {
+void sql::update(const string &command) {
 
 }
 
-void sql::insert(const vector<string>& vector) {
+void sql::insert(const string &command) {
 
 }
 
-void sql::select(const vector<string>& vector) {
+void sql::select(const string &command) {
 
 }
 
-sql::sql(){}
 
 sql& sql::get_sql() {
     if(sql::SQL == nullptr) sql::SQL = new sql();

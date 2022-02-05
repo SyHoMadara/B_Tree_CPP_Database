@@ -1,12 +1,12 @@
 #include<iostream>
-#include "libs/BTree.h"
+//#include "libs/BTree.h"
+#include "regex"
 using namespace std;
 
 
 int main(){
-  BTree<int> B(3);
-//   B.insert();
-	;
-
+    regex r("CREATE TABLE +");
+    string s = "CREATE TABLE slkdfjlksdjlf";
+    cout << regex_match(s, r);
 	
 }

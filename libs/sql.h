@@ -16,15 +16,15 @@ private:
 public:
     static sql& get_sql();
     const vector<data_base> dbs;
-    const vector<string> commands = {"CREATE", "DELETE", "UPDATE", "INSERT", "SElECT"};
+    vector<string> commands;
     static vector<string> tokenize(string &str);
-    pair<int, vector<string>>* find_command(string &command);
+    pair<int, string>* find_command(string &command);
     void command_handler(string command);
-    void remove(const vector<string>& vector);
-    void create(const vector<string>& vector);
-    void update(const vector<string>& vector);
-    void insert(const vector<string>& vector);
-    void select(const vector<string>& vector);
+    void remove(const string &command);
+    void create(const string &command);
+    void update(const string &command);
+    void insert(const string &command);
+    void select(const string &command);
 };
 
 
