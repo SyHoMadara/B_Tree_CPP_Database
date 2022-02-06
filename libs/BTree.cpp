@@ -43,8 +43,9 @@ void BTNode<T>::print() {
 }
 
 template <typename T>
-BTree<T>::BTree(int M) {
+BTree<T>::BTree(int M, const string& name) {
     root = NULL;
+    this->name = name;
     m = M;
     min = (m + 1) / 2;
     flag = 1;

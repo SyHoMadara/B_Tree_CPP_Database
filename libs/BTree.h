@@ -37,7 +37,8 @@ class BTree {
     int flag, flag1;
 
    public:
-    explicit BTree(int M);
+    string name;
+    explicit BTree(int M, const string& name);
     T max(T a, T b);
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
     void f(BTNode<T> * h ,int x ,BTNode<T> * t) ;
