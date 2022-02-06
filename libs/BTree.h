@@ -17,7 +17,7 @@ class BTNode {
    public:
     int m;
     int min;
-    Node<T> **a;
+    Node<T> *a;
     BTNode<T> **b;
     BTNode<T> *parent;
     int Num;
@@ -31,7 +31,7 @@ class BTNode {
 template <typename T>
 class BTree {
    private:
-    BTNode<T> *root;
+    BTNode<T> * root ;
     int m;
     int min;
     int flag, flag1;
@@ -42,8 +42,8 @@ class BTree {
     T max(T a, T b);
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
     void f(BTNode<T> * h ,int x ,BTNode<T> * t) ;
-    void insert1(BTNode<T> * h , T k) ;
-    void insert(T k );
+    Node<T>* insert1(BTNode<T> * h , T k) ;
+    Node<T>* insert(T k );
     void print();
 
     BTNode<T> *Root();
