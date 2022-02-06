@@ -6,7 +6,7 @@ template <typename T>
 BTNode<T>::BTNode(int M, bool f) {
     m = M;
     min = (m + 1) / 2;
-    a = new Node<T>*[m - 1];
+    a = new Node<T>[m - 1];
     b = new BTNode *[m];
     Num = 0;
     l = f;
@@ -14,7 +14,7 @@ BTNode<T>::BTNode(int M, bool f) {
 
 template <typename T>
 bool BTNode<T>::IsFull() {
-    if (Num == m - 2) return true;
+    if (Num == m - 1) return true;
     return false;
     //k;kkh
 }
@@ -22,8 +22,8 @@ bool BTNode<T>::IsFull() {
 template <typename T>
 BTNode<T> *BTNode<T>::search(int k) {
     int i = 0 ;
-    while(i <= Num &&  a[i]->data < k ) i++ ;
-    if (a[i]->data == k) return this ;
+    while(i <= Num &&  a[i].data < k ) i++ ;
+    if (a[i].data == k) return this ;
     if( l) return NULL ;
     return b[i]->search(k) ;
 }
@@ -32,7 +32,7 @@ template <typename T>
 void BTNode<T>::print() {
     int i ;
     for (i = 0; i < Num ; i++){
-        cout <<" "  << a[i]->data;
+        cout <<" "  << a[i].data;
         if (l == false) b[i]->print();
 
 
@@ -62,7 +62,7 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
         if (h->l) return h ;
         int i ;
         for( i = 0 ; i <h->Num ; i++){
-            if (k < h->a[i]->data){
+            if (k < h->a[i].data){
                 return s(h->b[i] , k , i , h) ;
             }
         }
@@ -79,58 +79,63 @@ template <typename T>
 void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
     BTNode<T> * q = new BTNode<T>( m , h->l);
     q->Num = min-1 ;
-    for( int i = 0 ; i < min - 1 ; i++) q->a[i]->data = h->a[i+min]->data;
+    for( int i = 0 ; i < min - 1 ; i++) q->a[i].data = h->a[i+min].data;
     if (h->l == false){
         for (int i = 0; i < min ; i++) q->b[i] = h->b[i+min];
     }
     h->Num = min - 1 ;
     for (int i = t->Num; i >= x+1; i--) t->b[i+1] = t->b[i] ;
     t->b[x+1] = q;
-    for (int i = t->Num; i >= x; i--) t->a[i+1]->data = t->a[i]->data ;
-    t->a[x]->data = h->a[min-1]->data ;
+    for (int i = t->Num; i >= x; i--) t->a[i+1].data = t->a[i].data ;
+    t->a[x].data = h->a[min-1].data ;
     t->Num ++ ;
 }
 template <typename T>
-void BTree<T>:: insert1(BTNode<T> * h , T k){
+Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
     int i = h->Num - 1 ;
     if(h->l){
         while ( 0 <=i  && h->a[i] > k){
-            h->a[i+1]->data = h->a[i]->data;
+            h->a[i+1].data = h->a[i].data;
             i--;
         }
-        h->a[i+1]->data = k;
+        h->a[i+1].data = k;
         h->Num ++;
+        return h->a[i+1] ;
     }
     else{
         while (i >= 0 && h->a[i] > k) i--;
         if (h->b[i+1]->Num == m-1){
             f(h->b[i+1],i+1,h);
-            if (h->a[i+1]->data < k)i++;
+            if (h->a[i+1].data < k)i++;
         }
         insert1(h->b[i+1],k);
     }
 }
 template <typename T>
- void BTree<T>::insert(T k) {
+Node<T>* BTree<T>::insert(T k) {
     if( root == NULL ){
+        //cout<<8 ;
         BTNode<T> *tnode = new BTNode<T>( m , true);
         root = tnode ;
         root->parent = NULL ;
-        root->a[0]->data = k ;
+        root->a[0].data = k ;
         root->Num ++ ;
-        return  ;
+        return root->a[0] ;
     }
+
     else{
+        //cout << 7 ;
         if( root->Num == m-1){
             BTNode<T> *t = new BTNode<T>(m, false);
             t->b[0] = root;
             f( root,0,t);
             int i = 0;
-            if (t->a[0]->data < k) i++;
+            if (t->a[0].data < k) i++;
             insert1( t->b[i] ,k);
             root = t;
         }
         else{
+            //cout<< 6 ;
             insert1(root , k) ;
         }
         /*BTNode<T> * h = s(root, k, 0 , NULL);
