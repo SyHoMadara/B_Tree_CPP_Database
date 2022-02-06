@@ -5,8 +5,8 @@
 
 
 sql::sql() {
-    commands = {"CREATE TABLE", "DELETE FROM", "UPDATE", "INSERT INTO", "SElECT", "SELECT \\*"};
-    for (auto &command : commands) command += "(.+)";
+    commands = {"CREATE TABLE", "DELETE FROM", "UPDATE", "INSERT INTO", "SELECT \\*", "SELECT"};
+    for (auto &command : commands) command += " .+";
 }
 
 vector<string> sql::tokenize(string &str) {
@@ -41,11 +41,12 @@ void sql::command_handler(string command) {
             sql::insert(p->second);
             break;
         case 4:
-            sql::select(p->second);
-            break;
-        case 5:
             sql::select_all(p->second);
             break;
+        case 5:
+            sql::select(p->second);
+            break;
+
     }
 }
 
@@ -66,11 +67,13 @@ void sql::create(const string &command) {
     regex_search(command, m, first_regex);
     string table_name = m[1].str();
     auto parameters = sql::extract_parameters(m[2].str());
-    vector<NODE_HASH_TYPE> p;
-    for(string ss: parameters){
+    vector<pair<string, int>> p;
+    for (string ss: parameters) {
         sregex_iterator it2(ss.begin(), ss.end(), r);
-        p.push_back(hash_code(it2->str(), (it2++)->str()));
+        string name = it2->str();
+        p.emplace_back(name, hash_code(name, (it2++)->str()).second);
     }
+    tables.emplace_back(table_name, p);
 
 }
 
@@ -100,19 +103,19 @@ void sql::select(const string &command) {
     regex_search(command, m, r);
     string table_name = m[2].str();
     auto columns = sql::extract_parameters(m[1].str());
-    for(auto cc: columns) cout << cc << endl;
+    for (auto cc: columns) cout << cc << endl;
     string condition = m[3];
 
 }
 
-void sql::select_all(const string& command) {
+void sql::select_all(const string &command) {
     // SELECT * FROM {table name} WHERE condition
     regex r(R"(SELECT \* FROM (\w+) WHERE (.+))");
     smatch m;
     regex_search(command, m, r);
     string table_name = m[1].str();
     string condition = m[2].str();
-    cout<<table_name<< " " << condition;
+    cout << table_name << " " << condition;
 
 }
 
@@ -178,9 +181,10 @@ vector<string> sql::extract_parameters(const string &par) {
 
 }
 
-vector<string> sql::split(const string &par, const char& with){
-    string wit; wit+=with;
-    string reg = "([^"+wit+"]+)" ;
+vector<string> sql::split(const string &par, const char &with) {
+    string wit;
+    wit += with;
+    string reg = "([^" + wit + "]+)";
     regex par_regex(reg);
     vector<string> result;
     for (sregex_iterator it(par.begin(), par.end(), par_regex), it_end; it != it_end; it++) {
