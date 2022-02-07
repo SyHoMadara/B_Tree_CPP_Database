@@ -19,8 +19,6 @@ public:
 
     vector<BTree<T> *> btrees;
 
-    void create(string &table_name, const vector<COLUMN_TYPE> &columns);
-
     void insert(const vector<string> &fields);
 
     vector<string> select(vector<string> &fields, string &condition);
@@ -28,11 +26,13 @@ public:
     void remove(string &condition);
 
     void update(const vector<string> &fields, string &condition);
+
+    void create(string table_name, const vector<COLUMN_TYPE> &columns);
 };
 
 
 template<typename T>
-void table<T>::create(string &table_name, const vector<COLUMN_TYPE> &columns) {
+void table<T>::create(string table_name, const vector<COLUMN_TYPE> &columns) {
     this->name = table_name;
     BTree<T> id_btree(NUMBER_OF_CHILDES, "id", "int");
     this->id_bTree = &id_btree;
@@ -160,7 +160,7 @@ template< typename T >class Node{
 public:
     T data;
     Node<T>* nextField;
-    BTNode<T>* self;
+    Node<long long int> *self;
 };
 
 template <typename T>
@@ -427,7 +427,7 @@ Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
         h->a[i+1].data = k;
         h->Num ++;
         h->a[i+1].self=h->a[i+1] ;
-        return h->a[i+1] ;
+        return &h->a[i+1] ;
     }
     else{
         while (i >= 0 && h->a[i] > k) i--;
@@ -448,7 +448,7 @@ Node<T>* BTree<T>::insert(T k) {
         root->a[0].data = k ;
         root->Num ++ ;
         root->a[0].self = root ;
-        return root->a[0] ;
+        return &root->a[0] ;
     }
 
     else{
@@ -670,7 +670,7 @@ public:
 
     static long long int constr2long(string s);
 
-    static NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
+    static NODE_HASH_TYPE hash_code(const string &s2, const string &s1);
 
     static vector<string> split(const string &par, const char &with);
 
