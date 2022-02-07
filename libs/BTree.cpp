@@ -3,7 +3,8 @@
 #include <iostream>
 
 template <typename T>
-BTNode<T>::BTNode(int M, bool f) {
+BTNode<T>::BTNode(int M, bool f,const string& name) {
+    this->name = name;
     m = M;
     min = (m + 1) / 2;
     a = new Node<T>[m - 1];
@@ -20,10 +21,10 @@ bool BTNode<T>::IsFull() {
 }
 
 template <typename T>
-BTNode<T> *BTNode<T>::search(int k) {
+Node<T> *BTNode<T>::search(int k) {
     int i = 0 ;
     while(i <= Num &&  a[i].data < k ) i++ ;
-    if (a[i].data == k) return this ;
+    if (a[i].data == k) return a[i] ;
     if( l) return NULL ;
     return b[i]->search(k) ;
 }
@@ -58,6 +59,11 @@ T BTree<T>::max(T a, T b) {
     return a;
 }
 template <typename T>
+Node<T>* BTree<T>:: search(T k){
+    return root->search(k) ;
+
+}
+template <typename T>
 BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
     if( h != NULL){
         if (h->l) return h ;
@@ -70,7 +76,7 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
         return s(h->b[h->Num] , k , i , h) ;
     }
     else{
-        BTNode<T> *tnode = new BTNode<T>( m , true);
+        BTNode<T> *tnode = new BTNode<T>( m , true,name);
         p->b[in] = tnode ;
         tnode->parent = p ;
         return tnode;
@@ -78,7 +84,7 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
 }
 template <typename T>
 void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
-    BTNode<T> * q = new BTNode<T>( m , h->l);
+    BTNode<T> * q = new BTNode<T>( m , h->l ,name);
     q->Num = min-1 ;
     for( int i = 0 ; i < min - 1 ; i++) q->a[i].data = h->a[i+min].data;
     if (h->l == false){
@@ -101,6 +107,7 @@ Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
         }
         h->a[i+1].data = k;
         h->Num ++;
+        h->a[i+1].self=h->a[i+1] ;
         return h->a[i+1] ;
     }
     else{
@@ -116,18 +123,19 @@ template <typename T>
 Node<T>* BTree<T>::insert(T k) {
     if( root == NULL ){
         //cout<<8 ;
-        BTNode<T> *tnode = new BTNode<T>( m , true);
+        BTNode<T> *tnode = new BTNode<T>( m , true,name);
         root = tnode ;
         root->parent = NULL ;
         root->a[0].data = k ;
         root->Num ++ ;
+        root->a[0].self = root ;
         return root->a[0] ;
     }
 
     else{
         //cout << 7 ;
         if( root->Num == m-1){
-            BTNode<T> *t = new BTNode<T>(m, false);
+            BTNode<T> *t = new BTNode<T>(m, false,name);
             t->b[0] = root;
             f( root,0,t);
             int i = 0;
