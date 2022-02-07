@@ -88,6 +88,14 @@ void sql::update(const string &command) {
     smatch m;
     regex_search(command, m, r);
     string table_name = m[1].str();
+    auto p = extract_parameters(m[2]);
+    string condition = m[3];
+    for(auto &t: tables){
+        if(table_name==t->name){
+            t->update(p, condition);
+            break;
+        }
+    }
 
 }
 

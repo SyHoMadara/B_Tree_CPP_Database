@@ -43,10 +43,8 @@ table<T>::table(const string &name, const vector<COLUMN_TYPE> &columns) {
 }
 
 template<typename T>
-void table<T>::select(vector<string> &fields, string &condition) {
-    string conclear;
-    for(char &c: condition) if (c!='\"') conclear+=c;
-    auto con = sql::split(conclear, '=');
+vector<string> table<T>::select(vector<string> &fields, string &condition) {
+    auto con = sql::split(condition, '=');
     BTree<T> *bTree;
     for(table<T> &t: btrees){
         if(t.name==con[0]) {
@@ -64,16 +62,15 @@ void table<T>::select(vector<string> &fields, string &condition) {
         result.push_back(sql::hash_inverse(node->data, node->self->name));
         node = id_node->nextField;
     }
-    for(auto& r: result) cout << r << " ";
-    cout << '\n';
+//    for(auto& r: result) cout << r << " ";
+//    cout << '\n';
+    return result;
 
 }
 
 template<typename T>
 void table<T>::remove(string &condition) {
-    string conclear;
-    for(char &c: condition) if (c!='\"') conclear+=c;
-    auto con = sql::split(conclear, '=');
+    auto con = sql::split(condition, '=');
     BTree<T> *bTree;
     for(table<T> &t: btrees){
         if(t.name==con[0]) {
@@ -109,5 +106,16 @@ void table<T>::remove(string &condition) {
     bt1->Delete(id_node->data);
     id_queue.push(iid);
 
+}
+
+template<typename T>
+void table<T>::update(const vector<string> &fields, string &condition) {
+    vector<string> fields_name;
+    for(auto *bt: btrees){
+        fields_name.push_back(bt->name);
+    }
+    auto p = select(fields_name, condition);
+    remove(condition);
+    insert(fields);
 }
 
