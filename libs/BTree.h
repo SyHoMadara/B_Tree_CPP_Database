@@ -1,3 +1,7 @@
+
+#ifndef B_TREE_CPP_DATABASE_BTREE_H
+#define B_TREE_CPP_DATABASE_BTREE_H
+
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -11,10 +15,10 @@ public:
 };
 
 template <typename T>
-class BTree;
+class BTree1;
 template <typename T>
 class BTNode {
-   public:
+public:
     int m;
     int min;
     string name ;
@@ -36,17 +40,17 @@ class BTNode {
 };
 
 template <typename T>
-class BTree {
-   private:
+class BTree1 {
+private:
     BTNode<T> * root ;
     int m;
     int min;
     int flag, flag1;
 
-   public:
+public:
     string name;
     string type;
-    BTree(int M, const string& name, string type);
+    BTree1(int M, const string& name, string type);
     T max(T a, T b);
     Node<T>* search(T k) ;
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
@@ -60,3 +64,7 @@ class BTree {
     BTNode<T> *Root();
     /*int find(BTNode<T> * h , int i);*/
 };
+
+
+
+#endif //B_TREE_CPP_DATABASE_BTREE_H

@@ -150,7 +150,7 @@ void BTNode<T>::print() {
 }
 
 template <typename T>
-BTree<T>::BTree(int M, const string& name, string type) {
+BTree1<T>::BTree1(int M, const string& name, string type) {
     this->type = type;
     root = NULL;
     this->name = name;
@@ -160,17 +160,17 @@ BTree<T>::BTree(int M, const string& name, string type) {
     flag1 = 1;
 }
 template <typename T>
-T BTree<T>::max(T a, T b) {
+T BTree1<T>::max(T a, T b) {
     if (a <= b) return b;
     return a;
 }
 template <typename T>
-Node<T>* BTree<T>:: search(T k){
+Node<T>* BTree1<T>:: search(T k){
     return root->search(k) ;
 
 }
 template <typename T>
-BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
+BTNode<T> *BTree1<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
     if( h != NULL){
         if (h->l) return h ;
         int i ;
@@ -189,7 +189,7 @@ BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
     }
 }
 template <typename T>
-void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
+void BTree1<T>::f(BTNode<T> * h , int x , BTNode<T> * t){
     BTNode<T> * q = new BTNode<T>( m , h->l ,name);
     q->Num = min-1 ;
     for( int i = 0 ; i < min - 1 ; i++) q->a[i].data = h->a[i+min].data;
@@ -204,7 +204,7 @@ void BTree<T>::f(BTNode<T> * h ,int x ,BTNode<T> * t){
     t->Num ++ ;
 }
 template <typename T>
-Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
+Node<T>* BTree1<T>:: insert1(BTNode<T> * h , T k){
     int i = h->Num - 1 ;
     if(h->l){
         while ( 0 <=i  && h->a[i] > k){
@@ -226,7 +226,7 @@ Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
     }
 }
 template <typename T>
-Node<T>* BTree<T>::insert(T k) {
+Node<T>* BTree1<T>::insert(T k) {
     if( root == NULL ){
         //cout<<8 ;
         BTNode<T> *tnode = new BTNode<T>( m , true,name);
@@ -356,7 +356,7 @@ Node<T>* BTree<T>::insert(T k) {
     }
 }
 template <typename T>
-void BTree<T>::Delete(T k){
+void BTree1<T>::Delete(T k){
     if (root == NULL) return;
     root->Delete(k);
     if (root->Num == 0) {
@@ -368,7 +368,7 @@ void BTree<T>::Delete(T k){
     return;
 }
 template <typename T>
-BTNode<T> *BTree<T>::Root() {
+BTNode<T> *BTree1<T>::Root() {
     return root;
 }
 
