@@ -56,7 +56,7 @@ public:
 
     long long int constr2long(string s);
 
-    NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
+    static NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
 
     static vector<string> split(const string &par, const char &with);
 

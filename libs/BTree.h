@@ -24,7 +24,7 @@ class BTNode {
     bool l;
     BTNode(int M, bool f);
     bool IsFull();
-    Node<T> *search(int k);
+    BTNode<T> *search(int k);
     void print();
 };
 
@@ -40,7 +40,6 @@ class BTree {
     string name;
     explicit BTree(int M, const string& name);
     T max(T a, T b);
-    Node<T>* search(T k) ;
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
     void f(BTNode<T> * h ,int x ,BTNode<T> * t) ;
     Node<T>* insert1(BTNode<T> * h , T k) ;

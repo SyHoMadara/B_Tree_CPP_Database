@@ -43,7 +43,8 @@ void BTNode<T>::print() {
 }
 
 template <typename T>
-BTree<T>::BTree(int M, const string& name) {
+BTree<T>::BTree(int M, const string& name, string type) {
+    this->type = type;
     root = NULL;
     this->name = name;
     m = M;
