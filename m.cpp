@@ -160,7 +160,7 @@ template< typename T >class Node{
 public:
     T data;
     Node<T>* nextField;
-    Node<long long int> *self;
+    BTNode<long long int> *self;
 };
 
 template <typename T>
