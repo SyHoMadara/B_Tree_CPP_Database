@@ -74,7 +74,6 @@ void sql::create(const string &command) {
         p.emplace_back(name, hash_code(name, (it2++)->str()).second);
     }
     tables.emplace_back(table_name, p);
-
 }
 
 void sql::update(const string &command) {
