@@ -18,7 +18,7 @@ public:
 
 //    static sql* SQL;
 //    static sql& get_sql();
-    vector<table<long long>> tables;
+    vector<table<long long>*> tables;
     vector<string> commands;
 
     static vector<string> tokenize(string &str);

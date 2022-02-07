@@ -2,7 +2,7 @@
 #include <utility>
 #include "iostream"
 #include "sql.h"
-
+#include "table.h"
 
 sql::sql() {
     commands = {"CREATE TABLE", "DELETE FROM", "UPDATE", "INSERT INTO", "SELECT \\*", "SELECT"};
@@ -73,7 +73,7 @@ void sql::create(const string &command) {
         string name = it2->str();
         p.emplace_back(name, hash_code(name, (it2++)->str()).second);
     }
-    tables.emplace_back(table_name, p);
+    tables.push_back(new table<long long>(table_name, p));
 }
 
 void sql::update(const string &command) {
@@ -93,8 +93,8 @@ void sql::insert(const string &command) {
     string table_name = m[1].str();
     auto fields = sql::extract_parameters(m[2].str());
     for(auto &t: tables){
-        if(t.name == table_name){
-            t.insert(fields);
+        if(t->name == table_name){
+            t->insert(fields);
             break;
         }
     }
@@ -111,8 +111,8 @@ void sql::select(const string &command) {
 //    for (auto cc: columns) cout << cc << endl;
     string condition = m[3];
     for(auto &t: tables){
-        if(table_name==t.name){
-            t.select(columns, condition);
+        if(table_name==t->name){
+            t->select(columns, condition);
         }
     }
 
@@ -183,6 +183,7 @@ string sql::hash_inverse(long long a, const string& type){
     if(type=="int") return to_string(a);
     if(type=="string") return conlong2str(a);
     if(type=="time") return conlong2time(a);
+    return "";
 }
 
 vector<string> sql::extract_parameters(const string &par) {

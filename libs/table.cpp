@@ -1,18 +1,17 @@
 #include "table.h"
 #include "BTree.h"
 #include "vector"
-#include "minheap.cpp"
 #include "sql.h"
 
 
 template<typename T>
 void table<T>::create(string &table_name, const vector<COLUMN_TYPE> &columns) {
     this->name = table_name;
-    BTree<T> id_btree(NUMBER_OF_CHILDES, "id", "int");
+    BTree1<T> id_btree(NUMBER_OF_CHILDES, "id", "int");
     this->id_bTree = &id_btree;
     btrees.push_back(id_btree);
     for (const auto &column: columns) {
-        BTree<T> bTree(NUMBER_OF_CHILDES, column.first, column.second);
+        BTree1<T> bTree(NUMBER_OF_CHILDES, column.first, column.second);
         btrees.push_back(&bTree);
     }
 }
@@ -48,7 +47,7 @@ void table<T>::select(vector<string> &fields, string &condition) {
     string conclear;
     for(char &c: condition) if (c!='\"') conclear+=c;
     auto con = sql::split(conclear, '=');
-    BTree<T> *bTree;
+    BTree1<T> *bTree;
     for(table<T> &t: btrees){
         if(t.name==con[0]) {
             bTree = &t;
