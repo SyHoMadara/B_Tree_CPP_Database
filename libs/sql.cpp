@@ -92,6 +92,12 @@ void sql::insert(const string &command) {
     regex_search(command, m, r);
     string table_name = m[1].str();
     auto fields = sql::extract_parameters(m[2].str());
+    for(auto &t: tables){
+        if(t.name == table_name){
+            t.insert(fields);
+            break;
+        }
+    }
 
 }
 
@@ -102,8 +108,13 @@ void sql::select(const string &command) {
     regex_search(command, m, r);
     string table_name = m[2].str();
     auto columns = sql::extract_parameters(m[1].str());
-    for (auto cc: columns) cout << cc << endl;
+//    for (auto cc: columns) cout << cc << endl;
     string condition = m[3];
+    for(auto &t: tables){
+        if(table_name==t.name){
+            t.select(columns, condition);
+        }
+    }
 
 }
 
@@ -114,7 +125,7 @@ void sql::select_all(const string &command) {
     regex_search(command, m, r);
     string table_name = m[1].str();
     string condition = m[2].str();
-    cout << table_name << " " << condition;
+//    cout << table_name << " " << condition;
 
 }
 
