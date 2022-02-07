@@ -19,7 +19,113 @@ bool BTNode<T>::IsFull() {
     return false;
     //k;kkh
 }
-
+template <typename T>
+void BTNode<T>::borrowFromPrev (int in) {
+    BTNode* child=b[in];
+    BTNode* sibling=b[in-1];
+    for (int i = child->Num-1; i>=0; --i) child->a[i+1].data = child->a[i].data;
+    if (child->l == false){
+        for(int i=child->Num ; i>=0; --i) child->b[i+1] = child->b[i];
+    }
+    child->a[0].data = a[in-1].data;
+    if(child->l == false ) child->b[0] = sibling->b[sibling->Num];
+    a[in-1].data = sibling->a[sibling->Num-1].data;
+    child->Num ++;
+    sibling->Num --;
+    return;
+}
+template <typename T>
+void BTNode<T>::borrowFromNext(int in) {
+    BTNode *child = b[in];
+    BTNode *sibling=b[in+1];
+    child->a[(child->Num)].data = a[in].data;
+    if (child->l == false) child->b[(child->Num)+1] = sibling->b[0];
+    a[in].data = sibling->a[0].data;
+    for (int i=1; i<sibling->Num; ++i)
+        sibling->a[i-1].data = sibling->a[i].data;
+    if ( sibling->l == false) {
+        for(int i=1; i<=sibling->Num; ++i) sibling->b[i-1] = sibling->b[i];
+    }
+    child->Num ++;
+    sibling->Num --;
+    return;
+}
+template <typename T>
+void BTNode<T>::merge(int in){
+    BTNode *child = b[in];
+    BTNode *sibling = b[in+1];
+    child->a[min-1].data = a[in].data;
+    for (int i=0; i<sibling->Num; ++i) child->a[i+min].data = sibling->a[i].data;
+    if (child->l == false){
+        for(int i=0; i<=sibling->Num; ++i) child->b[i+min] = sibling->b[i];
+    }
+    for (int i=in+1; i<Num; ++i) a[i-1].data = a[i].data;
+    for (int i=in + 2; i<=Num; ++i)  b[i-1] = b[i];
+    child->Num += sibling->Num + 1;
+    Num--;
+    delete(sibling);
+    return;
+}
+template <typename T>
+void BTNode<T>::fill(int in){
+    if (in != 0 && min<=b[in-1]->Num) borrowFromPrev(in);
+    else if (in !=  Num && min <= b[in+1]->Num) borrowFromNext(in);
+    else{
+        if (in != Num)
+            merge(in);
+        else
+            merge(in-1);
+    }
+    return;
+}
+template <typename T>
+void BTNode<T>::Delnl(int in){
+    int k = a[in].data;
+    if (min <=  b[in]->Num ) {
+        BTNode *q = b[in];
+        while (q->l == false) q = q->b[q->Num];
+        int pred =q->a[q->Num-1].data;
+        a[in].data = pred;
+        b[in]->Delete(pred);
+    }
+    else if  (min <= b[in+1]->Num ) {
+        BTNode *q = b[in+1];
+        while (q->l == false) q = q->b[0];
+        int ne = q->a[0].data;
+        a[in].data = ne;
+        b[in+1]->Delete(ne);
+    }
+    else{
+        merge(in);
+        b[in]->Delete(k);
+    }
+    return;
+}
+template <typename T>
+void BTNode<T>::Delete( T k){
+    int in=0;
+    while (in < Num && a[in].data < k) in++;
+    if (in < Num && a[in].data == k) {
+        if (l){
+            for (int i=in + 1; i<Num; ++i) a[i-1].data = a[i].data;
+            Num--;
+            return;
+        }
+        else Delnl(in);
+    }
+    else{
+        if (l) return;
+        bool flag ;
+        if(in == Num) flag = true ;
+        else flag = false ;
+        if (b[in]->Num < min) fill(in);
+        if (flag && in > Num)
+            b[in-1]->Delete(k);
+        else
+            b[in]->Delete(k);
+    }
+    return;
+}
 template <typename T>
 Node<T> *BTNode<T>::search(int k) {
     int i = 0 ;
@@ -249,7 +355,18 @@ Node<T>* BTree<T>::insert(T k) {
         }*/
     }
 }
-
+template <typename T>
+void BTree<T>::Delete(T k){
+    if (root == NULL) return;
+    root->Delete(k);
+    if (root->Num == 0) {
+        BTNode<T> *t = root;
+        if (root->l)root = NULL;
+        else root = root->b[0];
+        delete t;
+    }
+    return;
+}
 template <typename T>
 BTNode<T> *BTree<T>::Root() {
     return root;
