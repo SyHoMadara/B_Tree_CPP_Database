@@ -12,7 +12,8 @@ class table{
 public:
     using COLUMN_TYPE = pair<string,int>;
     string name;
-    priority_queue<int> id_queue;
+    priority_queue<int, vector<int>, greater<>> id_queue;
+    BTree<T> *id_bTree;
     int counter = 0;
     const static short int NUMBER_OF_CHILDES = 5; // In love Hamkari
     table(const string& name, const vector<COLUMN_TYPE>& columns);
