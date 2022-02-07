@@ -20,10 +20,10 @@ bool BTNode<T>::IsFull() {
 }
 
 template <typename T>
-BTNode<T> *BTNode<T>::search(int k) {
+Node<T> *BTNode<T>::search(int k) {
     int i = 0 ;
     while(i <= Num &&  a[i].data < k ) i++ ;
-    if (a[i].data == k) return this ;
+    if (a[i].data == k) return a[i] ;
     if( l) return NULL ;
     return b[i]->search(k) ;
 }
@@ -55,6 +55,11 @@ template <typename T>
 T BTree<T>::max(T a, T b) {
     if (a <= b) return b;
     return a;
+}
+template <typename T>
+Node<T>* BTree<T>:: search(T k){
+    return root->search(k) ;
+
 }
 template <typename T>
 BTNode<T> *BTree<T>::s(BTNode<T> *h, T k, int in, BTNode<T> *p) {
