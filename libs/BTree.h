@@ -26,6 +26,12 @@ class BTNode {
     BTNode(int M, bool f ,const string& name);
     bool IsFull();
     Node<T> *search(int k);
+    void borrowFromPrev (int in)  ;
+    void borrowFromNext(int in) ;
+    void merge(int in);
+    void fill(int in) ;
+    void Delnl(int in);
+    void Delete( T k) ;
     void print();
 };
 
@@ -47,6 +53,7 @@ class BTree {
     void f(BTNode<T> * h ,int x ,BTNode<T> * t) ;
     Node<T>* insert1(BTNode<T> * h , T k) ;
     Node<T>* insert(T k );
+    void Delete(T k) ;
     void print();
 
 
