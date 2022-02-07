@@ -17,12 +17,13 @@ class BTNode {
    public:
     int m;
     int min;
+    string name ;
     Node<T> *a;
     BTNode<T> **b;
     BTNode<T> *parent;
     int Num;
     bool l;
-    BTNode(int M, bool f);
+    BTNode(int M, bool f ,const string& name);
     bool IsFull();
     BTNode<T> *search(int k);
     void print();
