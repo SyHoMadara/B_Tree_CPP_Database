@@ -420,17 +420,17 @@ template <typename T>
 Node<T>* BTree<T>:: insert1(BTNode<T> * h , T k){
     int i = h->Num - 1 ;
     if(h->l){
-        while ( 0 <=i  && h->a[i] > k){
+        while ( 0 <=i  && h->a[i].data > k){
             h->a[i+1].data = h->a[i].data;
             i--;
         }
         h->a[i+1].data = k;
         h->Num ++;
-        h->a[i+1].self=h->a[i+1] ;
+        h->a[i+1] = h->a[i+1] ;
         return &h->a[i+1] ;
     }
     else{
-        while (i >= 0 && h->a[i] > k) i--;
+        while (i >= 0 && h->a[i].data > k) i--;
         if (h->b[i+1]->Num == m-1){
             f(h->b[i+1],i+1,h);
             if (h->a[i+1].data < k)i++;
