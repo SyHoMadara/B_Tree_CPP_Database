@@ -44,7 +44,7 @@ table<T>::table(const string &name, const vector<COLUMN_TYPE> &columns) {
 }
 
 template<typename T>
-void table<T>::select(vector<string> &fields, string condition) {
+void table<T>::select(vector<string> &fields, string &condition) {
     string conclear;
     for(char &c: condition) if (c!='\"') conclear+=c;
     auto con = sql::split(conclear, '=');
@@ -55,6 +55,17 @@ void table<T>::select(vector<string> &fields, string condition) {
             break;
         }
     }
-
+    Node<T> *node = bTree->search(sql::hash_code(con[1], bTree->type)), *id_node;
+    while(node->self->name!="id") node = node->nextField;
+    vector<string> result;
+    id_node = node;
+    node = node->nextField;
+    for(string field: fields){
+        while(node->self->name!=field) node = node->nextField;
+        result.push_back(sql::hash_inverse(node->data, node->self->name));
+        node = id_node->nextField;
+    }
+    for(auto& r: result) cout << r << " ";
+    cout << '\n';
 
 }

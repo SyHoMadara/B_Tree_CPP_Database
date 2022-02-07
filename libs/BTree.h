@@ -39,7 +39,8 @@ class BTree {
 
    public:
     string name;
-    explicit BTree(int M, const string& name);
+    string type;
+    BTree(int M, const string& name, string type);
     T max(T a, T b);
     Node<T>* search(T k) ;
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);

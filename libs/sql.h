@@ -44,23 +44,25 @@ public:
     const char BASE_CHARE = 'a';
 
 
-    string conlong2time(long long int a);
+    static string conlong2time(long long int a);
 
-    long long int contime2long(string s);
+    static long long int contime2long(string s);
 
-    long long int constr2long(string s, int base_convert, char base_char);
+    static long long int constr2long(string s, int base_convert, char base_char);
 
-    string conlong2str(long long int a, int base_convert, char base_char);
+    static string conlong2str(long long int a, int base_convert, char base_char);
 
-    string conlong2str(long long int a);
+    static string conlong2str(long long int a);
 
-    long long int constr2long(string s);
+    static long long int constr2long(string s);
 
     static NODE_HASH_TYPE hash_code(const string &s1, const string &s2);
 
     static vector<string> split(const string &par, const char &with);
 
     void select_all(const string &command);
+
+    static string hash_inverse(long long int a, const string &type);
 };
 
 

@@ -168,6 +168,12 @@ NODE_HASH_TYPE sql::hash_code(const string &s2, const string &s1) {
     return result;
 }
 
+string sql::hash_inverse(long long a, const string& type){
+    if(type=="int") return to_string(a);
+    if(type=="string") return conlong2str(a);
+    if(type=="time") return conlong2time(a);
+}
+
 vector<string> sql::extract_parameters(const string &par) {
     // remove parenthesis from end and begin.
     string clear_par;
