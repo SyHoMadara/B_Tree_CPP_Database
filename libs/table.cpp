@@ -4,6 +4,7 @@
 #include "minheap.cpp"
 #include "sql.h"
 
+
 template<typename T>
 void table<T>::create(string &table_name, const vector<COLUMN_TYPE> &columns) {
     this->name = table_name;
@@ -40,4 +41,20 @@ void table<T>::insert(const vector<string> &fields) {
 template<typename T>
 table<T>::table(const string &name, const vector<COLUMN_TYPE> &columns) {
     create(name, columns);
+}
+
+template<typename T>
+void table<T>::select(vector<string> &fields, string condition) {
+    string conclear;
+    for(char &c: condition) if (c!='\"') conclear+=c;
+    auto con = sql::split(conclear, '=');
+    BTree<T> *bTree;
+    for(table<T> &t: btrees){
+        if(t.name==con[0]) {
+            bTree = &t;
+            break;
+        }
+    }
+
+
 }

@@ -21,6 +21,9 @@ public:
     vector<BTree<T>*> btrees;
     void create(string &table_name, const vector<COLUMN_TYPE>& columns);
     void insert(const vector<string>& fields);
+    void select(vector<string>& fields, const string& condition);
+
+    void select(vector<string> &fields, string condition);
 };
 
 
