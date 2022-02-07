@@ -14,7 +14,7 @@ public:
 };
 
 template <typename T>
-class BTree1;
+class BTree;
 template <typename T>
 class BTNode {
 public:
@@ -39,7 +39,7 @@ public:
 };
 
 template <typename T>
-class BTree1 {
+class BTree {
 private:
     BTNode<T> * root ;
     int m;
@@ -49,7 +49,7 @@ private:
 public:
     string name;
     string type;
-    BTree1(int M, const string& name, string type);
+    BTree(int M, const string& name, string type);
     T max(T a, T b);
     Node<T>* search(T k) ;
     BTNode<T> *s(BTNode<T> *h, T k, int in, BTNode<T> *p);
