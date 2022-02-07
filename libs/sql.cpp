@@ -56,7 +56,13 @@ void sql::remove(const string &command) {
     smatch m;
     regex_search(command, m, r);
     string table_name = m[1].str();
-    // TODO not complete condition most extract
+    string condition = m[2];
+    for(auto &t: tables){
+        if(t->name == table_name){
+            t->remove(condition);
+            break;
+        }
+    }
 
 }
 

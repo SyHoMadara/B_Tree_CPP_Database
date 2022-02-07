@@ -22,6 +22,7 @@ public:
     void create(string &table_name, const vector<COLUMN_TYPE>& columns);
     void insert(const vector<string>& fields);
     void select(vector<string>& fields, string& condition);
+    void remove(string &condition);
 
 };
 

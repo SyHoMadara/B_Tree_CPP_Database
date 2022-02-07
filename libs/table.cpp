@@ -68,3 +68,46 @@ void table<T>::select(vector<string> &fields, string &condition) {
     cout << '\n';
 
 }
+
+template<typename T>
+void table<T>::remove(string &condition) {
+    string conclear;
+    for(char &c: condition) if (c!='\"') conclear+=c;
+    auto con = sql::split(conclear, '=');
+    BTree<T> *bTree;
+    for(table<T> &t: btrees){
+        if(t.name==con[0]) {
+            bTree = &t;
+            break;
+        }
+    }
+    Node<T> *node = bTree->search(sql::hash_code(con[1], bTree->type)), *id_node;
+    while(node->self->name!="id") node = node->nextField;
+    id_node = node;
+    node = node->nextField;
+    BTree<T>* bt1;
+    Node<T>* nn = id_node->nextField, *next;
+    next = nn->nextField;
+    while(nn!=id_node){
+        for(BTree<T> &bt: btrees){
+            if(nn->self->name==bt.name){
+                bt1 = &bt;
+                break;
+            }
+        }
+        bt1->Delete(nn->data);
+        nn = next;
+        next = nn->nextField;
+    }
+    for(BTree<T> &bt: btrees){
+        if(id_node->self->name==bt.name){
+            bt1 = &bt;
+            break;
+        }
+    }
+    int iid = id_node->data;
+    bt1->Delete(id_node->data);
+    id_queue.push(iid);
+
+}
+
